@@ -4,13 +4,14 @@ Summary:	A Drift-Diffusion simulator for 1d semiconductor devices with Octave
 Name:		octave-%{octpkg}
 Version:	0.0.9
 Release:	1
+Url:		https://octave.sourceforge.io/%{octpkg}/
 Source0:	http://downloads.sourceforge.net/octave/%{octpkg}-%{version}.tar.gz
 License:	GPLv2+
 Group:		Sciences/Mathematics
-Url:		https://octave.sourceforge.io/%{octpkg}/
 BuildArch:	noarch
 
 BuildRequires:	octave-devel >= 3.0
+BuildRequires:	octave-bim
 
 Requires:	octave(api) = %{octave_api}
 Requires:	octave-bim
@@ -23,14 +24,28 @@ A Drift-Diffusion simulator for 1d semiconductor devices with Octave.
 
 This package is part of external Octave-Forge collection.
 
+%files
+%license COPYING
+#doc NEWS
+%dir %{octpkgdir}
+%{octpkgdir}/*
+
+#---------------------------------------------------------------------------
+
 %prep
-%setup -qcT
+%autosetup -p1 -n %{octpkg}-%{version}
+
+# remove backup files
+#find . -name \*~ -delete
 
 %build
-%octave_pkg_build -T
+%octave_pkg_build
 
 %install
 %octave_pkg_install
+
+%check
+%octave_pkg_check
 
 %post
 %octave_cmd pkg rebuild
@@ -40,10 +55,4 @@ This package is part of external Octave-Forge collection.
 
 %postun
 %octave_cmd pkg rebuild
-
-%files
-%dir %{octpkgdir}
-%{octpkgdir}/*
-#%doc %{octpkg}-%{version}/NEWS
-%doc %{octpkg}-%{version}/COPYING
 
